@@ -1,12 +1,11 @@
 {
-	"manifest_version": 2,
+	"manifest_version": 3,
 	"name": "Bookmark Manager Plus",
-	"version": "0.9.9.7",
+	"version": "0.9.10",
 	"description": "Search bookmarks and do whatever you can imagine.",
-	
+
 	"options_ui": {
-		"page": "options.html",
-		"chrome_style": true
+		"page": "options.html"
 	},
 	
 	"icons": {
@@ -15,22 +14,24 @@
 		"64": "icon/icon128.png"
 	},
 	
-	"content_security_policy": "script-src 'self' https://code.jquery.com https://ajax.googleapis.com; object-src 'self'",
-	
-	"browser_action": {
+	"content_security_policy": {
+    	"extension_pages": "script-src 'self'"
+	},
+
+	"action": {
 		"default_icon": "icon/icon128.png",
 		"default_popup": "popup.html"
 	},
 
 	"background": {
-		"page": "background.html",
-		"persistent": false
+		"service_worker": "js/background.js",
+		"type": "module"
 	},
 
 	"permissions": [
 		"bookmarks",
 		"tabs",
 		"storage",
-		"chrome://favicon/*"
+		"favicon"
 	]
 }

@@ -37,15 +37,17 @@ function getHierarchy(item) {
 	while (true) {
 		var results = BookmarkManager.get(parentId);
 		var parent = results[0];
+		let title = parentId == "0" ? "*" : parent.title;
 		
 		if(hierarchy.length == 0) {
-			hierarchy = parent.title;
+			hierarchy = title;
 		} else {
-			hierarchy = parent.title + " > " + hierarchy;
+			hierarchy = title + " > " + hierarchy;
 		}
 		
-		parentId = parent.parentId;
 		if(parentId == "0") break;
+
+		parentId = parent.parentId;
 	}
 	
 	return bmp.hierarchyCache[item.parentId] = "[" + hierarchy + "]";
@@ -510,6 +512,15 @@ function createList(parameter) {
 	updateGroupMaxWidth(targetFrame);
 }
 
+function faviconURL(pageUrl, size = 16) {
+	// https://developer.chrome.com/docs/extensions/how-to/ui/favicons
+	// https://github.com/GoogleChrome/chrome-extensions-samples/blob/main/api-samples/favicon/popup.js
+	const url = new URL(chrome.runtime.getURL('/_favicon/'));
+	url.searchParams.set('pageUrl', pageUrl); // this encodes the URL as well
+	url.searchParams.set('size', `${size}`); // size in pixels
+	return url.toString();
+}
+  
 function createListItem(parameter) {
 	
 	var queries = parameter.queries;
@@ -643,7 +654,8 @@ function createListItem(parameter) {
 	} else {
 		//var faviconURL = "https://www.google.com/s2/favicons?domain=" + item.url;
 		//var faviconURL = "chrome://favicon/" + item.url;
-		$img = '<img src="chrome://favicon/' + item.url + '" class="result-icon">';
+		// new favicon usage
+		$img = '<img src="' + faviconURL(item.url) + '" class="result-icon">';
 	}
 	
 	// var $div = $('<div>').append($b).append($q);

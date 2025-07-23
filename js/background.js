@@ -5,8 +5,9 @@ var bookmarkData;
 
 var badgeType;
 
-$(document).ready(function() {
-	
+// initListener();
+
+function initListener() {
 	// register refreshTree listeners
 	chrome.bookmarks.onCreated.addListener(refreshTree);
 	chrome.bookmarks.onRemoved.addListener(refreshTree);
@@ -26,7 +27,7 @@ $(document).ready(function() {
 			updateBadgeText(undefined, undefined, tab);
 		});
 	}); 
-});
+}
 
 function refreshTree() {
 	chrome.bookmarks.search({}, function(results) {
@@ -52,7 +53,9 @@ function updateBadgeText(tabId, changeInfo, tab) {
 	if(badgeType == "domain") {
 		
 		var reg = /:\/\/[^/]*/;
-		var url = reg.exec(tab.url)[0];
+		var url = reg.exec(tab.url)?.[0];
+
+		if (!url) return;
 	
 		var count = 0;
 		
@@ -126,5 +129,5 @@ function setBadgeText(count) {
 	if(count > 999999) {
 		count = parseInt(count / 1000000) + "m";
 	}
-	chrome.browserAction.setBadgeText({text: count.toString()});
+	chrome.action.setBadgeText({text: count.toString()});
 }

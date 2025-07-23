@@ -56,7 +56,7 @@ function restoreOptions() {
 		// default vlaues
 		badge: DEFAULT_BADGE_DISPLAY_MODE,
 		warning: DEFAULT_WARNING_COUNT,
-		apply: true,
+		apply: false,
 	}, function(items) {
 		$('#badge-display-mode').val(items.badge);
 		$('#warning-count').val(items.warning);
